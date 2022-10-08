@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+  redis:
+    image: 'redis:alpine'
+    restart: always
+    networks:
+      - redis-net
+
+  client:
+    image: erlnby/microservices-client:latest
+    restart: always
+    networks:
+      - nginx-net
+
+  api_server:
+    image: erlnby/microservices-server:latest
+    restart: always
+    depends_on:
+      - redis
+    networks:
+      - nginx-net
+      - redis-net
+
+  nginx:
+    image: erlnby/microservices-nginx:latest
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - client
+      - api_server
+    networks:
+      - nginx-net
+
+networks:
+  nginx-net:
+    driver: bridge
+  redis-net:
+    driver: bridge

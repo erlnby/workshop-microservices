@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.socket.io/4.4.1/socket.io.js"></script>
+</head>
+<body>
+<button class="increase">increase</button>
+
+<div class="value">???</div>
+
+<button class="decrease">decrease</button>
+
+<script>
+    const increaseButton = document.querySelector(".increase")
+    const decreaseButton = document.querySelector(".decrease")
+    const valueElement = document.querySelector(".value")
+
+    const socket = io();
+
+    socket.on("value", (value) => {
+        valueElement.textContent = value;
+    })
+
+    increaseButton.addEventListener("click", () => {
+        socket.emit("increase");
+    })
+
+    decreaseButton.addEventListener("click", () => {
+        socket.emit("decrease");
+    })
+</script>
+</body>
+</html>
